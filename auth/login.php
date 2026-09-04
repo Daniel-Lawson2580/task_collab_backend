@@ -78,7 +78,7 @@ require __DIR__ . '/../includes/auth_header.php';
                 <a href="forgot_password.php" style="font-size:0.85rem; color:var(--primary); font-weight:500; text-decoration:none;">Forgot password?</a>
             </div>
             <div style="position:relative; margin-top:8px;">
-                <input type="password" id="password" name="password" required placeholder="••••••••" style="width:100%; padding:12px; padding-right:40px; border-radius:var(--radius-sm);">
+                <input type="password" id="password" name="password" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" style="width:100%; padding:12px; padding-right:40px; border-radius:var(--radius-sm);">
                 <i class="ph ph-eye" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted); font-size:1.2rem;" onclick="togglePasswordVisibility(this, 'password')"></i>
             </div>
         </div>
@@ -105,3 +105,4 @@ require __DIR__ . '/../includes/auth_header.php';
     </p>
 
 <?php require __DIR__ . '/../includes/auth_footer.php'; ?>
+
