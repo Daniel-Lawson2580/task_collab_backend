@@ -1,0 +1,82 @@
+CREATE DATABASE IF NOT EXISTS wave_rentals;
+USE wave_rentals;
+
+-- Create Customer Table
+CREATE TABLE customer (
+    customerID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    License_No VARCHAR(50) NOT NULL UNIQUE,
+    phone_No VARCHAR(15) NOT NULL UNIQUE
+);
+
+-- Create Car Table
+CREATE TABLE Car (
+    VehicleID INT AUTO_INCREMENT PRIMARY KEY,
+    License_plate VARCHAR(50) NOT NULL UNIQUE,
+    Model VARCHAR(50) NOT NULL,
+    Brand VARCHAR(50) NOT NULL,
+    Status VARCHAR(20) NOT NULL DEFAULT 'Available'
+);
+
+-- Create Employee Table
+CREATE TABLE Employee (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    Fname VARCHAR(50) NOT NULL,
+    Lname VARCHAR(50) NOT NULL,
+    position VARCHAR(50),
+    sex VARCHAR(10) NOT NULL
+);
+
+-- Create Rental Table (With Foreign Keys & Cascading)
+CREATE TABLE Rental (
+    RentalID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT NOT NULL,
+    VehicleID INT NOT NULL,
+    EmployeeID INT NOT NULL,
+    RentalDate DATE NOT NULL,
+    ReturnDate DATE NULL,
+    FOREIGN KEY (CustomerID) REFERENCES customer(customerID) ON DELETE CASCADE,
+    FOREIGN KEY (VehicleID) REFERENCES Car(VehicleID) ON DELETE CASCADE,
+    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID) ON DELETE CASCADE
+);
+
+-- Create Payment Table
+CREATE TABLE Payment (
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    RentalID INT NOT NULL,
+    paymentDate DATE NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    Pamethod VARCHAR(50) NOT NULL,
+    FOREIGN KEY (RentalID) REFERENCES Rental(RentalID) ON DELETE CASCADE
+);
+
+
+USE wave_rentals;
+
+-- Populate Customers
+INSERT INTO customer (Name, License_No, phone_No) VALUES
+('Kofi Mensah', 'GHA-829102-A', '0244123456'),
+('Ama Serwaa', 'GHA-930219-B', '0555987654'),
+('Selorm Alornyo', 'GHA-481029-C', '0201122334');
+
+-- Populate Fleet Cars
+INSERT INTO Car (License_plate, Model, Brand, Status) VALUES
+('VR-101-26', 'Corolla', 'Toyota', 'Rented'),
+('VR-302-26', 'Civic', 'Honda', 'Available'),
+('VR-505-26', 'Elantra', 'Hyundai', 'Available');
+
+-- Populate Staff Members
+INSERT INTO Employee (Fname, Lname, position, sex) VALUES
+('Mawuli', 'Koku', 'Rental Agent', 'Male'),
+('Esenam', 'Abla', 'Manager', 'Female');
+
+-- Populate Rental Agreements
+INSERT INTO Rental (CustomerID, VehicleID, EmployeeID, RentalDate, ReturnDate) VALUES
+(1, 1, 1, '2026-07-01', '2026-07-05'),
+(2, 3, 1, '2026-07-10', NULL);
+
+
+-- Populate Payments
+INSERT INTO Payment (RentalID, paymentDate, Amount, Pamethod) VALUES
+(1, '2026-07-01', 1200.00, 'Mobile Money'),
+(2, '2026-07-10', 850.00, 'Cash');
