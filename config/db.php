@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Database connection settings.
  * Uses environment variables for live hosting (like Render/Aiven), falls back to local XAMPP.
