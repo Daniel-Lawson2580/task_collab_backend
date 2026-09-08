@@ -34,7 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_role'] = $user['role'];
-                if (is_api_request()) { echo json_encode(['success' => true, 'user' => $user]); exit; } else { redirect('/task_collab_system/index.php'); }
+                
+                $token = bin2hex(random_bytes(32));
+                $stmt2 = $conn->prepare("INSERT INTO user_sessions (user_id, session_id) VALUES (?, ?)");
+                $stmt2->bind_param('is', $user['id'], $token);
+                $stmt2->execute();
+                
+                if (is_api_request()) { echo json_encode(['success' => true, 'user' => $user, 'token' => $token]); exit; } else { redirect('/task_collab_system/index.php'); }
             } else {
                 if (is_api_request()) { echo json_encode(['error' => 'Incorrect email or password.']); exit; }
                 $errors[] = 'Incorrect email or password.';
@@ -78,7 +84,7 @@ require __DIR__ . '/../includes/auth_header.php';
                 <a href="forgot_password.php" style="font-size:0.85rem; color:var(--primary); font-weight:500; text-decoration:none;">Forgot password?</a>
             </div>
             <div style="position:relative; margin-top:8px;">
-                <input type="password" id="password" name="password" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" style="width:100%; padding:12px; padding-right:40px; border-radius:var(--radius-sm);">
+                <input type="password" id="password" name="password" required placeholder="••••••••" style="width:100%; padding:12px; padding-right:40px; border-radius:var(--radius-sm);">
                 <i class="ph ph-eye" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted); font-size:1.2rem;" onclick="togglePasswordVisibility(this, 'password')"></i>
             </div>
         </div>
@@ -105,4 +111,3 @@ require __DIR__ . '/../includes/auth_header.php';
     </p>
 
 <?php require __DIR__ . '/../includes/auth_footer.php'; ?>
-
