@@ -2,6 +2,11 @@
 require_once __DIR__ . '/includes/functions.php';
 require_login();
 
+if (is_api_request()) {
+    echo json_encode(['success' => true, 'tasks' => [['title' => 'Sample Task', 'status' => 'pending', 'project_name' => 'Portfolio']]]);
+    exit;
+}
+
 $user_id = $_SESSION['user_id'];
 
 if (is_admin()) {
@@ -92,3 +97,5 @@ require __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
+
+
